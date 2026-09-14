@@ -353,9 +353,9 @@
                                 <td th:text="${student.className}"></td>
                                 <td>
                                     <div class="table-actions">
-                                        <button type="button" class="btn-action btn-edit">
+                                        <a th:href="@{/students/edit/{id}(id=${student.id})}" class="btn-action btn-edit text-decoration-none">
                                             <i class="bi bi-pencil-square me-1"></i>Sửa
-                                        </button>
+                                        </a>
                                         <a th:href="@{/students/delete/{id}(id=${student.id})}"
                                            class="btn-action btn-delete text-decoration-none"
                                            onclick="return confirm('Xác nhận xóa sinh viên này?');">
@@ -370,8 +370,9 @@
             </div>
 
             <div id="studentForm" class="content-panel mt-4">
-                <h3 class="mb-3">Thêm sinh viên mới</h3>
-                <form th:action="@{/students/add}" th:object="${newStudent}" method="post">
+                <h3 class="mb-3" th:text="${isEdit} ? 'Cập nhật sinh viên' : 'Thêm sinh viên mới'"></h3>
+                <form th:action="${isEdit} ? @{/students/update} : @{/students/add}" th:object="${newStudent}" method="post">
+                    <input type="hidden" th:field="*{id}" />
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label">Mã sinh viên</label>
@@ -394,7 +395,7 @@
                             <input type="text" class="form-control" th:field="*{className}" placeholder="Nhập tên lớp" title="Nhập tên lớp">
                         </div>
                         <div class="col-12 mt-2">
-                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                            <button type="submit" class="btn btn-primary" th:text="${isEdit} ? 'Cập nhật' : 'Thêm mới'" title="Gửi thông tin sinh viên"></button>
                         </div>
                     </div>
                 </form>

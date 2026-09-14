@@ -38,12 +38,33 @@ public class StudentViewController {
         model.addAttribute("students", students);
         model.addAttribute("keyword", keyword);
         model.addAttribute("newStudent", new Student());
+        model.addAttribute("isEdit", false);
+        return "students";
+    }
+
+    // Sửa sinh viên
+    @GetMapping("/edit/{id}")
+    public String editStudent(@PathVariable("id") UUID id, Model model) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sinh viên với id: " + id));
+
+        model.addAttribute("students", studentRepository.findAll());
+        model.addAttribute("newStudent", student);
+        model.addAttribute("keyword", "");
+        model.addAttribute("isEdit", true);
         return "students";
     }
 
     // Thêm sinh viên
     @PostMapping("/add")
     public String addStudent(@ModelAttribute("newStudent") Student student) {
+        studentRepository.save(student);
+        return "redirect:/students";
+    }
+
+    // Cập nhật sinh viên
+    @PostMapping("/update")
+    public String updateStudent(@ModelAttribute("newStudent") Student student) {
         studentRepository.save(student);
         return "redirect:/students";
     }
